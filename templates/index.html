@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Weather Report</title>
     <style>
         body {
@@ -40,24 +39,65 @@
             display: inline-block;
             text-align: left;
         }
+        .error {
+            color: #ff4d4d;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .spinner {
+            margin-top: 20px;
+            display: none;
+        }
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
-    <h1>🌍 Live Weather Report</h1>
-    <form method="POST">
-        <input type="text" name="city_name" placeholder="Enter city name..." required>
-        <button type="submit">🔍 Get Weather</button>
-    </form>
+<h1>🌍 Live Weather Report</h1>
 
-    {% if weather %}
-    <div class="weather-box">
-        <h2>Weather in {{ weather.city }}</h2>
-        <p>🌡 Temperature: {{ weather.temperature }} °C</p>
-        <p>💧 Humidity: {{ weather.humidity }} %</p>
-        <p>💨 Wind Speed: {{ weather.wind_speed }} km/h</p>
-    </div>
-    {% endif %}
+<form method="POST" onsubmit="showSpinner()">
+    <input type="text" name="city_name" placeholder="Enter city name..." required>
+    <button type="submit">🔍 Get Weather</button>
+</form>
+
+<!-- Error message -->
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<!-- Loading spinner -->
+<div id="spinner" class="spinner">
+    <div class="loader"></div>
+    <p>Fetching weather data...</p>
+</div>
+
+<!-- Weather data -->
+{% if weather %}
+<div class="weather-box">
+    <h2>Weather in {{ weather.city }}</h2>
+    <p>🌡 Temperature: {{ weather.temperature }} °C</p>
+    <p>💧 Humidity: {{ weather.humidity }} %</p>
+    <p>💨 Wind Speed: {{ weather.wind_speed }} km/h</p>
+</div>
+{% endif %}
+
+<script>
+    function showSpinner() {
+        document.getElementById('spinner').style.display = 'block';
+    }
+</script>
 
 </body>
 </html>
